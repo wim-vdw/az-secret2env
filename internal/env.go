@@ -8,36 +8,53 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azsecrets"
-	"github.com/spf13/viper"
+)
+
+const (
+	ColorRed    = "\u001b[31m"
+	ColorGreen  = "\u001b[32m"
+	ColorYellow = "\u001b[33m"
+	ColorReset  = "\u001b[0m"
 )
 
 type EnvVariable struct {
-	Original string
-	Name     string
-	Value    string
-	IsSecret bool
+	original string
+	name     string
+	value    string
+	isSecret bool
 }
 
 type EnvVariables []EnvVariable
 
-func (e *EnvVariable) Convert() error {
-	if e.IsSecret {
-		parts := strings.Split(e.Value, "/")
+func (ev *EnvVariable) Convert(verboseError, showStatus bool) error {
+	if ev.isSecret {
+		if showStatus {
+			fmt.Printf("%s[PROCESS]%s %s", ColorYellow, ColorReset, ev.original)
+		}
+		parts := strings.Split(ev.value, "/")
 		if len(parts) != 2 {
-			return fmt.Errorf("environment variable %s does not consist of 2 parts", e.Name)
+			if showStatus {
+				fmt.Printf("\r%s[FAIL]   %s %s\n", ColorRed, ColorReset, ev.original)
+			}
+			return fmt.Errorf("environment variable %s does not consist of 2 parts", ev.name)
 		}
 		keyvaultURL := "https://" + parts[0]
 		secretName := parts[1]
-		verbose := viper.GetBool("verbose")
 		secret, err := GetSecretFromKeyvault(keyvaultURL, secretName)
 		if err != nil {
-			if verbose {
-				return fmt.Errorf("could not retrieve secret from keyvault %s\n%s", keyvaultURL, err)
+			if showStatus {
+				fmt.Printf("\r%s[FAIL]   %s %s\n", ColorRed, ColorReset, ev.original)
 			}
-			return fmt.Errorf("could not retrieve secret from keyvault %s (run with --verbose switch for more info)", keyvaultURL)
+			if verboseError {
+				return fmt.Errorf("could not retrieve secret %q from keyvault %q\n%s", secretName, keyvaultURL, err)
+			}
+			return fmt.Errorf("could not retrieve secret %q from keyvault %q (use --verbose switch for more info)", secretName, keyvaultURL)
 		}
-		if err := os.Setenv(e.Name, secret); err != nil {
+		if err := os.Setenv(ev.name, secret); err != nil {
 			return err
+		}
+		if showStatus {
+			fmt.Printf("\r%s[OK]     %s %s\n", ColorGreen, ColorReset, ev.original)
 		}
 	}
 	return nil
