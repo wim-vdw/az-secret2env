@@ -20,11 +20,12 @@ func init() {
 
 func dryrun(cmd *cobra.Command, args []string) error {
 	filename := viper.GetString("env-file")
+	verboseError := viper.GetBool("verbose")
 	client := internal.NewClient(filename)
-	if err := client.LoadEnvs(); err != nil {
+	if err := client.LoadEnvs(verboseError); err != nil {
 		return err
 	}
-	if err := client.ConvertSecrets(); err != nil {
+	if err := client.ConvertSecrets(verboseError, true); err != nil {
 		return err
 	}
 	client.PrintDryRunResults()

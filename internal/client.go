@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
-	"github.com/spf13/viper"
 )
 
 type Client struct {
@@ -21,8 +20,7 @@ func NewClient(filename string) *Client {
 	}
 }
 
-func (c *Client) LoadEnvs() error {
-	verboseError := viper.GetBool("verbose")
+func (c *Client) LoadEnvs(verboseError bool) error {
 	if err := c.ReadExtraEnvsFromFile(verboseError); err != nil {
 		return err
 	}
@@ -44,10 +42,9 @@ func (c *Client) LoadEnvs() error {
 	return nil
 }
 
-func (c *Client) ConvertSecrets() error {
-	verboseError := viper.GetBool("verbose")
+func (c *Client) ConvertSecrets(verboseError, showStatus bool) error {
 	for _, env := range c.envs {
-		if err := env.Convert(verboseError, true); err != nil {
+		if err := env.Convert(verboseError, showStatus); err != nil {
 			return err
 		}
 	}
