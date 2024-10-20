@@ -65,7 +65,7 @@ func (c *Client) ReadExtraEnvsFromFile(verboseError bool) error {
 			if verboseError {
 				return fmt.Errorf("unable to read or parse the specified environment file %q\n%s", c.filename, err)
 			}
-			return fmt.Errorf("unable to read or parse the specified environment file %q (use --verbose switch for more info)", c.filename)
+			return fmt.Errorf("unable to read or parse the specified environment file %q (use the --verbose flag for more details)", c.filename)
 		}
 	}
 	return nil

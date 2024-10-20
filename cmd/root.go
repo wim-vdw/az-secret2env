@@ -10,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "az-secret2env",
 	Short:   "Execute a program with environment variables temporarily populated by Azure Key Vault secrets.",
-	Version: "v1.0.0-alpha",
+	Version: "v1.0.0-beta",
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
 	},
@@ -30,6 +30,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolP("verbose", "", false, "Enable verbose output for detailed error handling and diagnostics.")
 	rootCmd.SetVersionTemplate("{{ .Version }}\n")
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
+	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
 	rootCmd.SilenceUsage = true
 	_ = viper.BindPFlag("env-file", rootCmd.PersistentFlags().Lookup("env-file"))
 	_ = viper.BindPFlag("verbose", rootCmd.PersistentFlags().Lookup("verbose"))

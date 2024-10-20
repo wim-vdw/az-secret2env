@@ -12,15 +12,15 @@ import (
 
 var execCmd = &cobra.Command{
 	Use:     "exec",
-	Short:   "Execute a program with secrets injected into environment variables",
+	Short:   "Execute a program with secrets injected into environment variables.",
 	Long:    "Execute a program with secrets injected into environment variables.",
-	Aliases: []string{"run", "start", "launch", "invoke"},
+	Aliases: []string{"run", "start", "launch", "execute"},
 	Args:    cobra.MatchAll(cobra.MinimumNArgs(1)),
 	RunE:    execProgram,
 }
 
 func init() {
-	execCmd.Flags().BoolP("show-status", "s", false, "Show status during conversion of environment variables.")
+	execCmd.Flags().BoolP("show-status", "s", false, "Show status updates during the conversion of environment variables.")
 	_ = viper.BindPFlag("show-status", execCmd.Flags().Lookup("show-status"))
 	rootCmd.AddCommand(execCmd)
 }
@@ -49,9 +49,9 @@ func execProgram(cmd *cobra.Command, args []string) error {
 	err := runner.Run()
 	if err != nil {
 		if verboseError {
-			return fmt.Errorf("could not execute program\n%s", err)
+			return fmt.Errorf("unable to execute the specified program\n%s", err)
 		}
-		return fmt.Errorf("could not execute program (use --verbose switch for more info)")
+		return fmt.Errorf("unable to execute the specified program (use the --verbose flag for more details)")
 	}
 	return nil
 }

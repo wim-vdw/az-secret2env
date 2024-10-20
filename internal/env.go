@@ -36,7 +36,7 @@ func (ev *EnvVariable) Convert(verboseError, showStatus bool) error {
 			if showStatus {
 				fmt.Printf("\r%s[FAIL]   %s %s\n", ColorRed, ColorReset, ev.original)
 			}
-			return fmt.Errorf("environment variable %s does not consist of 2 parts", ev.name)
+			return fmt.Errorf("environment variable %s must consist of 2 parts (keyvault reference and secretname)", ev.name)
 		}
 		keyvaultURL := "https://" + parts[0]
 		secretName := parts[1]
@@ -46,9 +46,9 @@ func (ev *EnvVariable) Convert(verboseError, showStatus bool) error {
 				fmt.Printf("\r%s[FAIL]   %s %s\n", ColorRed, ColorReset, ev.original)
 			}
 			if verboseError {
-				return fmt.Errorf("could not retrieve secret %q from keyvault %q\n%s", secretName, keyvaultURL, err)
+				return fmt.Errorf("unable to retrieve secret %q from keyvault %q\n%s", secretName, keyvaultURL, err)
 			}
-			return fmt.Errorf("could not retrieve secret %q from keyvault %q (use --verbose switch for more info)", secretName, keyvaultURL)
+			return fmt.Errorf("unable to retrieve secret %q from keyvault %q (use the --verbose flag for more details)", secretName, keyvaultURL)
 		}
 		if err := os.Setenv(ev.name, secret); err != nil {
 			return err
