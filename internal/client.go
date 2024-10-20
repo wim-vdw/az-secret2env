@@ -53,9 +53,9 @@ func (c *Client) ConvertSecrets(verboseError, showStatus bool) error {
 
 func (c *Client) PrintDryRunResults() {
 	if c.containsSecrets {
-		fmt.Println("All secrets in environment variables converted with success.")
+		fmt.Println("All secret references in environment variables were successfully converted.")
 	} else {
-		fmt.Println("Environment variables do not contain secrets, no conversions done.")
+		fmt.Println("No secret references found in environment variables. No conversions were made.")
 	}
 }
 
@@ -63,9 +63,9 @@ func (c *Client) ReadExtraEnvsFromFile(verboseError bool) error {
 	if c.filename != "" {
 		if err := godotenv.Load(c.filename); err != nil {
 			if verboseError {
-				return fmt.Errorf("could not read or parse env file %q\n%s", c.filename, err)
+				return fmt.Errorf("unable to read or parse the specified environment file %q\n%s", c.filename, err)
 			}
-			return fmt.Errorf("could not read or parse env file %q (use --verbose switch for more info)", c.filename)
+			return fmt.Errorf("unable to read or parse the specified environment file %q (use --verbose switch for more info)", c.filename)
 		}
 	}
 	return nil

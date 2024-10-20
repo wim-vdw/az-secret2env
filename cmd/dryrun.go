@@ -10,7 +10,7 @@ var dryrunCmd = &cobra.Command{
 	Use:     "dry-run",
 	Short:   "Simulate secret retrieval without running a program",
 	Long:    "Simulate secret retrieval without running a program.",
-	Aliases: []string{"test", "validate", "check"},
+	Aliases: []string{"test", "check", "preview"},
 	RunE:    dryrun,
 }
 

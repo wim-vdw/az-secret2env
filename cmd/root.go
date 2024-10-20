@@ -26,8 +26,8 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().BoolP("help", "h", false, "Display this help message.")
 	rootCmd.Flags().BoolP("version", "v", false, "Display version info.")
-	rootCmd.PersistentFlags().StringP("env-file", "f", "", "File containing additional environment variables.")
-	rootCmd.PersistentFlags().BoolP("verbose", "", false, "Display extra info for error handling.")
+	rootCmd.PersistentFlags().StringP("env-file", "f", "", "Load additional environment variables from a specified file.")
+	rootCmd.PersistentFlags().BoolP("verbose", "", false, "Enable verbose output for detailed error handling and diagnostics.")
 	rootCmd.SetVersionTemplate("{{ .Version }}\n")
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.SilenceUsage = true
