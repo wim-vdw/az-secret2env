@@ -64,7 +64,10 @@ var cred *azidentity.DefaultAzureCredential
 
 func GetAuth() error {
 	var err error
-	cred, err = azidentity.NewDefaultAzureCredential(nil)
+	options := azidentity.DefaultAzureCredentialOptions{
+		AdditionallyAllowedTenants: []string{"*"},
+	}
+	cred, err = azidentity.NewDefaultAzureCredential(&options)
 	if err != nil {
 		return err
 	}
