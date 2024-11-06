@@ -17,16 +17,16 @@ const (
 	ColorReset  = "\u001b[0m"
 )
 
-type EnvVariable struct {
+type envVariable struct {
 	original string
 	name     string
 	value    string
 	isSecret bool
 }
 
-type EnvVariables []EnvVariable
+type envVariables []envVariable
 
-func (ev *EnvVariable) Convert(verboseError, showStatus bool) error {
+func (ev *envVariable) convert(verboseError, showStatus bool) error {
 	if ev.isSecret {
 		if showStatus {
 			fmt.Printf("%s[PROCESS]%s %s", ColorYellow, ColorReset, ev.original)
@@ -40,7 +40,7 @@ func (ev *EnvVariable) Convert(verboseError, showStatus bool) error {
 		}
 		keyvaultURL := "https://" + parts[0]
 		secretName := parts[1]
-		secret, err := GetSecretFromKeyvault(keyvaultURL, secretName)
+		secret, err := getSecretFromKeyvault(keyvaultURL, secretName)
 		if err != nil {
 			if showStatus {
 				fmt.Printf("\r%s[FAIL]   %s %s\n", ColorRed, ColorReset, ev.original)
@@ -62,7 +62,7 @@ func (ev *EnvVariable) Convert(verboseError, showStatus bool) error {
 
 var cred *azidentity.DefaultAzureCredential
 
-func GetAuth() error {
+func getAuth() error {
 	var err error
 	options := azidentity.DefaultAzureCredentialOptions{
 		AdditionallyAllowedTenants: []string{"*"},
@@ -74,8 +74,8 @@ func GetAuth() error {
 	return nil
 }
 
-func GetSecretFromKeyvault(keyvaultURL, secretName string) (string, error) {
-	err := GetAuth()
+func getSecretFromKeyvault(keyvaultURL, secretName string) (string, error) {
+	err := getAuth()
 	if err != nil {
 		return "", err
 	}

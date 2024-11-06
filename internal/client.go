@@ -10,7 +10,7 @@ import (
 
 type Client struct {
 	filename        string
-	envs            EnvVariables
+	envs            envVariables
 	containsSecrets bool
 }
 
@@ -20,8 +20,20 @@ func NewClient(filename string) *Client {
 	}
 }
 
+func readExtraEnvsFromFile(filename string, verboseError bool) error {
+	if filename != "" {
+		if err := godotenv.Load(filename); err != nil {
+			if verboseError {
+				return fmt.Errorf("unable to read or parse the specified environment file %q\n%s", filename, err)
+			}
+			return fmt.Errorf("unable to read or parse the specified environment file %q (use the --verbose flag for more details)", filename)
+		}
+	}
+	return nil
+}
+
 func (c *Client) LoadEnvs(verboseError bool) error {
-	if err := c.ReadExtraEnvsFromFile(verboseError); err != nil {
+	if err := readExtraEnvsFromFile(c.filename, verboseError); err != nil {
 		return err
 	}
 	for _, env := range os.Environ() {
@@ -31,11 +43,11 @@ func (c *Client) LoadEnvs(verboseError bool) error {
 		prefix := "azure://"
 		if strings.HasPrefix(value, prefix) {
 			value = strings.TrimPrefix(value, prefix)
-			newEnv := EnvVariable{original: env, name: name, value: value, isSecret: true}
+			newEnv := envVariable{original: env, name: name, value: value, isSecret: true}
 			c.envs = append(c.envs, newEnv)
 			c.containsSecrets = true
 		} else {
-			newEnv := EnvVariable{original: env, name: name, value: value, isSecret: false}
+			newEnv := envVariable{original: env, name: name, value: value, isSecret: false}
 			c.envs = append(c.envs, newEnv)
 		}
 	}
@@ -44,7 +56,7 @@ func (c *Client) LoadEnvs(verboseError bool) error {
 
 func (c *Client) ConvertSecrets(verboseError, showStatus bool) error {
 	for _, env := range c.envs {
-		if err := env.Convert(verboseError, showStatus); err != nil {
+		if err := env.convert(verboseError, showStatus); err != nil {
 			return err
 		}
 	}
@@ -57,16 +69,4 @@ func (c *Client) PrintDryRunResults() {
 	} else {
 		fmt.Println("No secret references found in environment variables. No conversions were made.")
 	}
-}
-
-func (c *Client) ReadExtraEnvsFromFile(verboseError bool) error {
-	if c.filename != "" {
-		if err := godotenv.Load(c.filename); err != nil {
-			if verboseError {
-				return fmt.Errorf("unable to read or parse the specified environment file %q\n%s", c.filename, err)
-			}
-			return fmt.Errorf("unable to read or parse the specified environment file %q (use the --verbose flag for more details)", c.filename)
-		}
-	}
-	return nil
 }
