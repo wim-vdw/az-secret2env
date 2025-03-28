@@ -22,8 +22,18 @@ execution of the desired process.
   execution.
 - **Environment-specific configurations**: Dynamically inject environment-specific secrets at runtime.
 
-## Installation
+## Installation with Homebrew on macOS
 
 ```bash
-go install github.com/wim-vdw/az-secret2env@latest
+# First, install the wim-vdw tap, a repository of all my Homebrew packages.
+brew tap wim-vdw/tap
+
+# Then, install az-secret2env.
+brew install wim-vdw/tap/az-secret2env
+
+# To update to the latest version of az-secret2env, first update Homebrew.
+brew uppdate
+
+# Then, upgrade az-secret2env.
+brew upgrade wim-vdw/tap/az-secret2env
 ```
