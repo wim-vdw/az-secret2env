@@ -37,3 +37,7 @@ brew uppdate
 # Then, upgrade az-secret2env.
 brew upgrade wim-vdw/tap/az-secret2env
 ```
+
+## Installation on Linux/Windows
+
+Download one of the pre-built releases from the [releases page](https://github.com/wim-vdw/az-secret2env/releases).
