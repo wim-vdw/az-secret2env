@@ -10,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "az-secret2env",
 	Short:   "Execute a program with environment variables temporarily populated by Azure Key Vault secrets.",
-	Version: "v1.0.1",
+	Version: "v1.0.2",
 	Run: func(cmd *cobra.Command, args []string) {
 		_ = cmd.Help()
 	},
