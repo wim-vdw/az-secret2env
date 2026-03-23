@@ -43,7 +43,7 @@ func init() {
 	rootCmd.Flags().BoolP("version", "v", false, "Display version information.")
 	rootCmd.PersistentFlags().StringP("env-file", "f", "", "Load additional environment variables from a specified file.")
 	rootCmd.PersistentFlags().BoolP("verbose", "", false, "Enable verbose output for detailed error handling and diagnostics.")
-	rootCmd.SetVersionTemplate("{{ .Version }}\n")
+	rootCmd.SetVersionTemplate("az-secret2env version: {{ .Version }}\n")
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.SetHelpCommand(&cobra.Command{Hidden: true})
 	rootCmd.SilenceUsage = true
