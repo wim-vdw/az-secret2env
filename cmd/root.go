@@ -16,6 +16,22 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+func SetVersion(version string) {
+	rootCmd.Version = version
+}
+
+var commit string
+
+func SetCommit(commitHash string) {
+	commit = commitHash
+}
+
+var buildTime string
+
+func SetBuildTime(bt string) {
+	buildTime = bt
+}
+
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
