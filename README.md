@@ -32,7 +32,7 @@ brew tap wim-vdw/tap
 brew install wim-vdw/tap/az-secret2env
 
 # To update to the latest version of az-secret2env, first update Homebrew.
-brew uppdate
+brew update
 
 # Then, upgrade az-secret2env.
 brew upgrade wim-vdw/tap/az-secret2env
