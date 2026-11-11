@@ -1,6 +1,6 @@
 module github.com/wim-vdw/az-secret2env
 
-go 1.26.0
+go 1.27
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.15.0
